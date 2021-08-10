@@ -19,6 +19,7 @@ type ListSysDictTypeReq struct {
 	DictName string `p:"dictName"` //字典名称
 	DictType string `p:"dictType"` //字典类型
 	Status   string `p:"status"`   //字典状态
+	AppId    string `p:"appId"`    //应用系统
 	comModel.PageReq
 }
 
@@ -28,6 +29,7 @@ type SysDictTypeAddReq struct {
 	DictType string `p:"dictType"  v:"required#字典类型不能为空"`
 	Status   uint   `p:"status"  v:"required|in:0,1#状态不能为空|状态只能为0或1"`
 	Remark   string `p:"remark"`
+	AppId   string `p:"appId"`
 	CreateBy uint64
 }
 
@@ -43,5 +45,6 @@ type SysDictTypeInfoRes struct {
 	DictType  string      `orm:"dict_type,unique" json:"dictType"`  // 字典类型
 	Status    uint        `orm:"status"           json:"status"`    // 状态（0正常 1停用）
 	Remark    string      `orm:"remark"           json:"remark"`    // 备注
+	AppId    string      `orm:"app_id"           json:"appId"`    // 应用系统
 	CreatedAt *gtime.Time `orm:"created_at"       json:"createdAt"` // 创建日期
 }

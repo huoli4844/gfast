@@ -213,6 +213,7 @@ CREATE TABLE `sys_dict_type` (
   `created_at` datetime DEFAULT NULL COMMENT '创建日期',
   `updated_at` datetime DEFAULT NULL COMMENT '修改日期',
   `deleted_at` datetime DEFAULT NULL COMMENT '删除日期',
+  `app_id` int(11) DEFAULT NULL COMMENT '应用系统',
   PRIMARY KEY (`dict_id`) USING BTREE,
   UNIQUE KEY `dict_type` (`dict_type`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=48 DEFAULT CHARSET=utf8mb4 ROW_FORMAT=COMPACT COMMENT='字典类型表';

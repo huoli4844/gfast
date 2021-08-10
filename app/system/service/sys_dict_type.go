@@ -37,6 +37,9 @@ func (s *sysDictType) SelectList(req *model.ListSysDictTypeReq) (total, page int
 	if req.EndTime != "" {
 		d = d.Where(dao.SysDictType.Columns.CreatedAt+" <=?", req.EndTime)
 	}
+	if req.AppId != "" {
+		d = d.Where(dao.SysDictType.Columns.AppId+"=", gconv.Int(req.AppId))
+	}
 	total, err = d.Count()
 	if err != nil {
 		g.Log().Error(err)
@@ -51,7 +54,7 @@ func (s *sysDictType) SelectList(req *model.ListSysDictTypeReq) (total, page int
 		req.PageSize = comModel.PageSize
 	}
 	err = d.Fields(model.SysDictTypeInfoRes{}).Page(page, req.PageSize).
-		Order(dao.SysDictType.Columns.DictId + " asc").Scan(&list)
+		Order(dao.SysDictType.Columns.DictId + " desc").Scan(&list)
 	if err != nil {
 		g.Log().Error(err)
 		err = gerror.New("获取数据失败")
