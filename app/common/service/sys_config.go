@@ -40,6 +40,9 @@ func (s *sysConfig) SelectListByPage(req *model.SysConfigSearchReq) (total, page
 		if req.EndTime != "" {
 			m = m.Where("create_time<=?", req.EndTime)
 		}
+		if req.AppId != "" {
+			m = m.Where("app_id=?", gconv.Int(req.AppId))
+		}
 	}
 	total, err = m.Count()
 	if err != nil {

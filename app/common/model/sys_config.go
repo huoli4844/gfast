@@ -15,6 +15,7 @@ type SysConfig struct {
 	ConfigKey   string      `orm:"config_key,unique" json:"configKey"`   // 参数键名
 	ConfigValue string      `orm:"config_value"      json:"configValue"` // 参数键值
 	ConfigType  int         `orm:"config_type"       json:"configType"`  // 系统内置（Y是 N否）
+	AppId  int         `orm:"app_id"       json:"appId"`  // 系统内置（Y是 N否）
 	CreateBy    uint        `orm:"create_by"         json:"createBy"`    // 创建者
 	UpdateBy    uint        `orm:"update_by"         json:"updateBy"`    // 更新者
 	Remark      string      `orm:"remark"            json:"remark"`      // 备注
@@ -30,6 +31,7 @@ type SysConfigSearchReq struct {
 	ConfigType string `p:"configType"` //状态
 	BeginTime  string `p:"beginTime"`  //开始时间
 	EndTime    string `p:"endTime"`    //结束时间
+	AppId    string `p:"appId"`    //结束时间
 	PageReq
 }
 
@@ -40,6 +42,7 @@ type SysConfigAddReq struct {
 	ConfigValue string `p:"configValue"  v:"required#参数键值不能为空"`
 	ConfigType  int    `p:"configType"    v:"required|in:0,1#系统内置不能为空|系统内置类型只能为0或1"`
 	Remark      string `p:"remark"`
+	AppId       string `p:"appId"  v:"required#参数键值不能为空"`   //系统类型
 	CreateBy    uint64
 }
 

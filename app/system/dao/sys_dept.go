@@ -43,9 +43,9 @@ type SysDeptAddParams struct {
 	ParentID  int    `json:"parentId" orm:"parent_id"  p:"parentId"  v:"required#父级不能为空"`
 	DeptName  string `json:"deptName" orm:"dept_name" p:"deptName"  v:"required#部门名称不能为空"`
 	OrderNum  int    `json:"orderNum" orm:"order_num"  p:"orderNum"  v:"required#排序不能为空"`
-	Leader    string `json:"leader" orm:"leader" p:"leader"  v:"required#负责人不能为空"`
-	Phone     string `json:"phone" orm:"Phone" p:"phone"  v:"required#电话不能为空"`
-	Email     string `json:"email" orm:"email" p:"email"  v:"required#邮箱不能为空"`
+	Leader    string `json:"leader" orm:"leader" p:"leader"  //v:"required#负责人不能为空"`
+	Phone     string `json:"phone" orm:"Phone" p:"phone"  //v:"required#电话不能为空"`
+	Email     string `json:"email" orm:"email" p:"email"  //v:"required#邮箱不能为空"`
 	Status    string `json:"status" orm:"status" p:"status"  v:"required#状态必须"`
 	Ancestors string `json:"ancestors" p:"ancestors" orm:"ancestors"`
 	CreatedBy uint64 `json:"CreatedBy"  orm:"created_by"`

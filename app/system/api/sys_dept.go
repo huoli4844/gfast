@@ -23,10 +23,13 @@ func (c *dept) List(r *ghttp.Request) {
 	if err := r.Parse(&searchParams); err != nil {
 		c.FailJsonExit(r, err.(gvalid.Error).FirstString())
 	}
-	if list, err := service.Dept.GetList(searchParams); err != nil {
+	//if list, err := service.Dept.GetList(searchParams); err != nil {
+	id := c.GetCurrentUser(r.GetCtx()).DeptId
+	if list, err := service.Dept.GetListByDeptId(int64(id),searchParams); err != nil {
 		c.FailJsonExit(r, err.Error())
 	} else {
 		if list != nil {
+
 			c.SusJsonExit(r, list)
 		} else {
 			c.SusJsonExit(r, []*model.SysDept{})
@@ -39,6 +42,13 @@ func (c *dept) Add(r *ghttp.Request) {
 	if err := r.Parse(&addParams); err != nil {
 		c.FailJsonExit(r, err.(gvalid.Error).FirstString())
 	}
+
+	//只有平台超级管理员才可以在根目录下建立新的组织结构
+	id := c.GetCurrentUser(r.GetCtx()).DeptId
+    if addParams.ParentID == 100 && id != 100 {
+		c.FailJsonExit(r, "您没有权限建立顶级部门")
+	}
+
 	addParams.CreatedBy = c.GetCurrentUser(r.GetCtx()).GetUserId()
 	if err := service.Dept.AddDept(addParams); err != nil {
 		c.FailJsonExit(r, err.Error())
@@ -61,9 +71,21 @@ func (c *dept) Get(r *ghttp.Request) {
 
 func (c *dept) Edit(r *ghttp.Request) {
 	var editParams *dao.EditParams
+	//user, err := service.SysUser.GetUserInfoById(c.GetCurrentUser(r.GetCtx()).GetUserId())
+
 	if err := r.Parse(&editParams); err != nil {
 		c.FailJsonExit(r, err.(gvalid.Error).FirstString())
 	}
+
+	//只有平台超级管理员才可以修改根目录
+	id := c.GetCurrentUser(r.GetCtx()).DeptId
+	dept := service.Dept.GetParentIdByDeptId(id)
+	if int(editParams.DeptID) == 100 {
+		 if int(dept.DeptId) != 100 {
+			 c.FailJsonExit(r, "您没有权限修改根目录")
+		 }
+	}
+
 	editParams.UpdatedBy = c.GetCurrentUser(r.GetCtx()).GetUserId()
 	if err := service.Dept.EditDept(editParams); err != nil {
 		c.FailJsonExit(r, err.Error())
@@ -102,6 +124,7 @@ func (c *dept) RoleDeptTreeSelect(r *ghttp.Request) {
 	if err != nil {
 		c.FailJsonExit(r, err.Error())
 	}
+
 	dList := service.Dept.GetDeptListTree(0, list)
 	res := g.Map{
 		"depts":       dList,
@@ -116,7 +139,10 @@ func (c *dept) TreeSelect(r *ghttp.Request) {
 	if err != nil {
 		c.FailJsonExit(r, err.Error())
 	}
-	dList := service.Dept.GetDeptListTree(0, list)
+	//dList := service.Dept.GetDeptListTree(0, list)
+	//限制用户只能看的自己的归属的部门和下级部门
+	id := c.GetCurrentUser(r.GetCtx()).DeptId
+	dList := service.Dept.GetDeptListTreeByDeptId(int64(id), list)
 	res := g.Map{
 		"depts": dList,
 	}

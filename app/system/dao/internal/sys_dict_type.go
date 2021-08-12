@@ -33,10 +33,10 @@ type sysDictTypeColumns struct {
 	CreateBy  string // 创建者
 	UpdateBy  string // 更新者
 	Remark    string // 备注
-	AppId    string // 应用系统
 	CreatedAt string // 创建日期
 	UpdatedAt string // 修改日期
 	DeletedAt string // 删除日期
+	AppId	  string // 系统类型
 }
 
 var (
@@ -53,10 +53,10 @@ var (
 			CreateBy:  "create_by",
 			UpdateBy:  "update_by",
 			Remark:    "remark",
-			AppId:    "app_id",
 			CreatedAt: "created_at",
 			UpdatedAt: "updated_at",
 			DeletedAt: "deleted_at",
+			AppId: "app_id",
 		},
 	}
 )

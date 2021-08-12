@@ -30,7 +30,7 @@
 
 # Database.
 [database]
-    link  = "mysql:root:123456@tcp(localhost:3306)/gfast-v2-os"
+    link  = "mysql:root:123456@tcp(localhost:3306)/gfast-v2-open"
     charset   = "utf8mb4" #数据库编码
     debug = true
     dryRun = false #空跑
@@ -76,7 +76,7 @@
     autoRemovePre = true   #是否自动删除表前缀
     tablePrefix   = "table_,qxkj_"   #表前缀
     templatePath  = "./template/vm"  #代码生成模板路径
-    fontDir = "F:/tools/webProject/p2021/gfast-v2-ui/ruoyi-ui" #前端路径
+    frontDir = "/Users/matthew/Documents/go-project/mygfv2/gfast-open-ui" #前端路径
 
 # 上传配置
 [upload]

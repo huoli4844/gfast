@@ -31,6 +31,7 @@ type sysConfigColumns struct {
 	CreatedAt   string // 创建时间
 	UpdatedAt   string // 修改时间
 	DeletedAt   string // 删除时间
+	AppId	    string // 系统类型
 }
 
 // NewSysConfigDao creates and returns a new DAO object for table data access.
@@ -47,6 +48,7 @@ func NewSysConfigDao() *SysConfigDao {
 		CreatedAt:   "created_at",
 		UpdatedAt:   "updated_at",
 		DeletedAt:   "deleted_at",
+		AppId: "app_id",
 	}
 	return &SysConfigDao{
 		C:     columns,

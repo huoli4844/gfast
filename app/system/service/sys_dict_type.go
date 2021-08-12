@@ -38,7 +38,7 @@ func (s *sysDictType) SelectList(req *model.ListSysDictTypeReq) (total, page int
 		d = d.Where(dao.SysDictType.Columns.CreatedAt+" <=?", req.EndTime)
 	}
 	if req.AppId != "" {
-		d = d.Where(dao.SysDictType.Columns.AppId+"=", gconv.Int(req.AppId))
+		d = d.Where(dao.SysDictType.Columns.AppId+" = ", gconv.Int(req.AppId))
 	}
 	total, err = d.Count()
 	if err != nil {
