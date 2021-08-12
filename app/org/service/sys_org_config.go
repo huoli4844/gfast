@@ -25,7 +25,7 @@ type sysOrgConfig struct {
 var SysOrgConfig = new(sysOrgConfig)
 
 // GetList 获取任务列表
-func (s *sysOrgConfig) GetList(req *dao.SysOrgConfigSearchReq) (total, page int, list []*model.SysOrgConfig, err error) {
+func (s *sysOrgConfig) GetList(req *dao.SysOrgConfigSearchReq,deptId int64) (total, page int, list []*model.SysOrgConfig, err error) {
 	model := dao.SysOrgConfig.Ctx(req.Ctx)
 	if req != nil {         
 
@@ -47,7 +47,12 @@ func (s *sysOrgConfig) GetList(req *dao.SysOrgConfigSearchReq) (total, page int,
 
             if req.AppName != "" {
                 model = model.Where(dao.SysOrgConfig.Columns.AppName+" like ?", "%"+req.AppName+"%")
-            }    
+            }
+
+            //如果不是平台超级管理员，那么只能看到自己公司的数据
+            if deptId != 100 {
+				model = model.Where(dao.SysOrgConfig.Columns.DeptId+" = ?", deptId)
+			}
 
 	}
 	total, err = model.Count()

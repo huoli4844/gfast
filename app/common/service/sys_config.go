@@ -216,7 +216,6 @@ func (s *sysConfig) SyncDataToOrgConfig() error {
 				}
 
 			}
-
 		} else {
 			//这个公司没有数据，那么就插入一份完整的系统参数给这个公司
 			insertSql := `INSERT INTO sys_org_config (dept_id,config_id, config_name,config_key,config_value,config_type,remark,app_id) 

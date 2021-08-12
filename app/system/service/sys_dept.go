@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	"gfast/app/system/dao"
 	"gfast/app/system/model"
 )
@@ -52,7 +51,7 @@ func (s *dept) GetListByDeptId(deptId int64 , searchParams *dao.SysDeptSearchPar
 	}
 	list := make([]*model.SysDept, 0, len(depts))
 
-	fmt.Println("---------GetListByDeptId---------")
+	//fmt.Println("---------GetListByDeptId---------")
 	//限制只返回这个用户归属的部门列表
 	myList := s.FindSonByDeptId(depts,deptId)
 	if searchParams.ExcludeId != 0 {

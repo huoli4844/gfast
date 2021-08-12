@@ -35,7 +35,9 @@ func (c *sysOrgConfig) List(r *ghttp.Request) {
 		c.FailJsonExit(r, err.(gvalid.Error).FirstString())
 	}
 	req.Ctx = r.GetCtx()
-	total, page, list, err := service.SysOrgConfig.GetList(req)
+	deptId := c.GetCurrentUser(r.GetCtx()).DeptId
+
+	total, page, list, err := service.SysOrgConfig.GetList(req, int64(deptId))
 	if err != nil {
 		c.FailJsonExit(r, err.Error())
 	}
