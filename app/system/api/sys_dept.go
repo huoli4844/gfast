@@ -94,6 +94,8 @@ func (c *dept) Edit(r *ghttp.Request) {
 	c.SusJsonExit(r, "编辑成功")
 }
 
+//删除公司时候，需要删除这个公司的sys_org_config 中的数据
+
 func (c *dept) Delete(r *ghttp.Request) {
 	id := r.GetInt64("id")
 	if id == 0 {

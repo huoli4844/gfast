@@ -1,8 +1,10 @@
 package service
 
 import (
+	"fmt"
 	"gfast/app/system/dao"
 	"gfast/app/system/model"
+	"github.com/gogf/gf/frame/g"
 )
 
 type dept struct {
@@ -186,6 +188,7 @@ func (s *dept) DelDept(id int64) error {
 	if err != nil {
 		return err
 	}
+
 	children := s.FindSonByParentId(list, id)
 	ids := make([]int64, 0, len(list))
 	for _, v := range children {
@@ -193,5 +196,11 @@ func (s *dept) DelDept(id int64) error {
 	}
 	ids = append(ids, id)
 	_, err = dao.SysDept.Where(dao.SysDept.C.DeptId+" in (?)", ids).Delete()
+
+	//物理删除参数配置表中的该公司参数配置
+	delSql := `delete from sys_org_config where dept_id = %d`
+	delSql = fmt.Sprintf(delSql, id)
+	_, _ = g.DB().Exec(delSql)
+
 	return err
 }
