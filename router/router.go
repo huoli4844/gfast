@@ -3,6 +3,7 @@ package router
 import (
 	_ "gfast/app/buss/router"
 	"gfast/app/common/api"
+	_ "gfast/app/org/router"
 	_ "gfast/app/system/router"
 	"gfast/middleware"
 

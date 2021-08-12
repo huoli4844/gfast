@@ -1,20 +1,19 @@
 // ==========================================================================
 // GFast自动生成业务逻辑层相关代码，只生成一次，按需修改,再次生成不会覆盖.
-// 生成日期：2021-08-12 20:12:41
-// 生成路径: gfast/app/system/service/sys_org_config.go
+// 生成日期：2021-08-12 21:47:20
+// 生成路径: gfast/app/org/service/sys_org_config.go
 // 生成人：gfast
 // ==========================================================================
 
 package service
 
 import (
-	"context"
+    "context"    
 
-	"gfast/app/system/dao"
-	"gfast/app/system/model"
+	comModel "gfast/app/common/model"	
 
-	"gfast/library"
-	"github.com/gogf/gf/util/gconv"
+	"gfast/app/org/dao"
+	"gfast/app/org/model"	
 
 	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/frame/g"
@@ -28,7 +27,11 @@ var SysOrgConfig = new(sysOrgConfig)
 // GetList 获取任务列表
 func (s *sysOrgConfig) GetList(req *dao.SysOrgConfigSearchReq) (total, page int, list []*model.SysOrgConfig, err error) {
 	model := dao.SysOrgConfig.Ctx(req.Ctx)
-	if req != nil {        
+	if req != nil {         
+
+            if req.DeptId != "" {
+                model = model.Where(dao.SysOrgConfig.Columns.DeptId+" = ?", req.DeptId)
+            }        
 
             if req.ConfigName != "" {
                 model = model.Where(dao.SysOrgConfig.Columns.ConfigName+" like ?", "%"+req.ConfigName+"%")
@@ -36,10 +39,6 @@ func (s *sysOrgConfig) GetList(req *dao.SysOrgConfigSearchReq) (total, page int,
 
             if req.ConfigKey != "" {
                 model = model.Where(dao.SysOrgConfig.Columns.ConfigKey+" = ?", req.ConfigKey)
-            }         
-
-            if req.ConfigValue != "" {
-                model = model.Where(dao.SysOrgConfig.Columns.ConfigValue+" = ?", req.ConfigValue)
             }         
 
             if req.AppId != "" {
@@ -58,11 +57,18 @@ func (s *sysOrgConfig) GetList(req *dao.SysOrgConfigSearchReq) (total, page int,
 		return
 	}    
 
-	order:= "id asc"
-	if req.OrderBy!=""{
-		order = req.OrderBy
-	}
-	err = model.Order(order).Scan(&list)    
+    if req.PageNum == 0 {
+        req.PageNum = 1
+    }
+    page = req.PageNum
+    if req.PageSize == 0 {
+        req.PageSize = comModel.PageSize
+    }
+    order:= "id asc"
+    if req.OrderBy!=""{
+        order = req.OrderBy
+    }
+    err = model.Page(page, req.PageSize).Order(order).Scan(&list)    
 
 	if err != nil {
 		g.Log().Error(err)
@@ -108,11 +114,6 @@ func (s *sysOrgConfig) DeleteByIds(ids []int,ctx context.Context) (err error) {
 		return
 	}	
 
-    ids, err = s.GetChildrenIds(ids,ctx)
-    if err != nil {
-        return
-    }	
-
 	_, err = dao.SysOrgConfig.Ctx(ctx).Delete(dao.SysOrgConfig.Columns.Id+" in (?)", ids)
 	if err != nil {
 		g.Log().Error(err)
@@ -121,23 +122,3 @@ func (s *sysOrgConfig) DeleteByIds(ids []int,ctx context.Context) (err error) {
 	return
 }
 
-// GetChildrenIds 通过ID获取子级ID
-func (s *sysOrgConfig)GetChildrenIds(ids []int,ctx context.Context) ([]int, error) {
-	//获取所有
-	//_,_,all, err := s.GetList(&dao.SysOrgConfigSearchReq{Ctx:ctx})
-	_,_,all, err := s.GetList(&dao.SysOrgConfigSearchReq{})
-	if err != nil {
-		return nil, err
-	}
-	list := make(g.List, len(all))
-	for k, info := range all {
-		list[k] = gconv.Map(info)
-	}
-	for _, id := range ids {
-		children := library.FindSonByParentId(list, id, "deptId", "id")
-		for _, cid := range children {
-			ids = append(ids, gconv.Int(cid["id"]))
-		}
-	}
-	return ids, nil
-}

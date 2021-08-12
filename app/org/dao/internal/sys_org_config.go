@@ -1,7 +1,7 @@
 // ==========================================================================
 // GFast自动生成dao internal操作代码，无需手动修改，重新生成会自动覆盖.
-// 生成日期：2021-08-12 20:12:41
-// 生成路径: gfast/app/system/dao/internal/sys_org_config.go
+// 生成日期：2021-08-12 21:47:20
+// 生成路径: gfast/app/org/dao/internal/sys_org_config.go
 // 生成人：gfast
 // ==========================================================================
 
@@ -25,7 +25,7 @@ type SysOrgConfigColumns struct {
 
     Id  string  // 主键    
 
-    DeptId  string  // 组织机构    
+    DeptId  string  // 组织机构id 就是部门ID    
 
     ConfigId  string  // 参数主键    
 
@@ -35,7 +35,7 @@ type SysOrgConfigColumns struct {
 
     ConfigValue  string  // 参数键值    
 
-    ConfigType  string  // 系统内置    
+    ConfigType  string  // 系统内置（Y是 N否）    
 
     CreateBy  string  // 创建者    
 

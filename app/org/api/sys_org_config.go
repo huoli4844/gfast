@@ -1,7 +1,7 @@
 // ==========================================================================
 // GFast自动生成控制器相关代码，只生成一次，按需修改,再次生成不会覆盖.
-// 生成日期：2021-08-12 20:12:41
-// 生成路径: gfast/app/system/api/sys_org_config.go
+// 生成日期：2021-08-12 21:47:20
+// 生成路径: gfast/app/org/api/sys_org_config.go
 // 生成人：gfast
 // ==========================================================================
 
@@ -9,8 +9,10 @@ package api
 
 import (    
 
-    "gfast/app/system/dao"
-    "gfast/app/system/service"
+    sysApi "gfast/app/system/api"    
+
+    "gfast/app/org/dao"
+    "gfast/app/org/service"
     "github.com/gogf/gf/frame/g"
     "github.com/gogf/gf/net/ghttp"
     "github.com/gogf/gf/util/gvalid"    
@@ -19,7 +21,7 @@ import (
 
 type sysOrgConfig struct {    
 
-    SystemBase    
+    sysApi.SystemBase    
 
 }
 
