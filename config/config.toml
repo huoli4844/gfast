@@ -76,7 +76,7 @@
     autoRemovePre = true   #是否自动删除表前缀
     tablePrefix   = "table_,qxkj_"   #表前缀
     templatePath  = "./template/vm"  #代码生成模板路径
-    frontDir = "/Users/matthew/Documents/go-project/mygfv2/gfast-open-ui" #前端路径
+    frontDir = "/Users/matthew/Documents/my-gfastv2/gfast-ui" #前端路径
 
 # 上传配置
 [upload]
