@@ -8,6 +8,7 @@
 package service
 
 import (
+	"fmt"
 	"gfast/app/common/dao"
 	"gfast/app/common/global"
 	"gfast/app/common/model"
@@ -150,4 +151,83 @@ func (s *sysConfig) GetByKey(key string) (config *model.SysConfig, err error) {
 		err = gerror.New("获取配置失败")
 	}
 	return
+}
+
+type dept struct {
+	DeptId   int
+	DeptName string
+}
+
+// SyncDataToOrgConfig  同步所有系统参数到 公司参数表中
+/*
+  处理步骤
+  	获取所有的公司节点放到 deptLists 中
+    获取所有的 sysconfig 到 paramList 中
+  	获取所有的公司配置信息到 orgParamList 中
+
+	一、循环 deptlists
+		1.1 看看这个deptLists.dept_id 在 sys_org_config 中是否都存在，哪个公司不存在的，就用 insert into sys_org_config  (XXX,xxx) select (XXX,xxx) from sys_config 把数据完整的插入
+		1.2 如果sys_org_config 中存在了这个公司的参数，那么扫描这个公司的参数是不是齐全 ，没有的在插入
+*/
+func (s *sysConfig) SyncDataToOrgConfig() error {
+	//s := "SELECT * FROM `user` WHERE `status` IN(?)"
+	//m := g.DB().Raw(s, g.Slice{1,2,3}).WhereLT("age", 18).Limit(10).OrderAsc("id").All()
+	// SELECT * FROM `user` WHERE `status` IN(1,2,3) AND `age`=18 ORDER BY `id` ASC LIMIT 10
+
+	//只检索出上级是 平台根目录的节点，这种节点就是公司的节点
+	var deptLists []*dept
+	sql := "select dept_id,dept_name from `sys_dept` WHERE `status` IN(?) and `parent_id`=100 "
+	err := g.DB().Raw(sql, g.Slice{1}).OrderAsc("dept_id").Scan(&deptLists)
+
+	if err != nil {
+		g.Log().Error(err)
+	}
+
+	var paramList []*model.SysConfig
+	sql = "select * from `sys_config`"
+	err = g.DB().Raw(sql).OrderAsc("config_id").Scan(&paramList)
+	if err != nil {
+		g.Log().Error(err)
+	}
+
+	for _, dept := range deptLists {
+		sql := ` select dept_id from sys_org_config where dept_id=%d`
+		sql = fmt.Sprintf(sql, dept.DeptId)
+		d1, _ := g.DB().Raw(sql).All()
+		if len(d1) > 0 {
+			//代表这个公司的数据已经存在， 那么就判断这个公司的参数是否齐全
+			for _, param := range paramList {
+				sql1 := ` select dept_id from sys_org_config where (dept_id=%d) and (config_id = %d)`
+				sql1 = fmt.Sprintf(sql1, dept.DeptId, param.ConfigId)
+				d2, _ := g.DB().Raw(sql1).All()
+				if len(d2) > 0 {
+					//代表这个公司的这个参数数据已经存在 那么就不处理
+					continue
+				} else {
+					//把这个公司缺失的这个参数插入到这个公司中
+					insertDataSql := `INSERT INTO sys_org_config (dept_id,config_id, config_name,config_key,config_value,config_type,remark,app_id) 
+                      SELECT %d, config_id, config_name,config_key,config_value,config_type,remark,app_id FROM sys_config where config_id=%d`
+					insertDataSql = fmt.Sprintf(insertDataSql, dept.DeptId, param.ConfigId)
+					_, err = g.DB().Exec(insertDataSql)
+					if err != nil {
+						g.Log().Error(err)
+					}
+
+				}
+
+			}
+
+		} else {
+			//这个公司没有数据，那么就插入一份完整的系统参数给这个公司
+			insertSql := `INSERT INTO sys_org_config (dept_id,config_id, config_name,config_key,config_value,config_type,remark,app_id) 
+                      SELECT %d, config_id, config_name,config_key,config_value,config_type,remark,app_id FROM sys_config`
+			insertSql = fmt.Sprintf(insertSql, dept.DeptId)
+			_, err = g.DB().Exec(insertSql)
+			if err != nil {
+				g.Log().Error(err)
+			}
+		}
+	}
+
+	return err
 }

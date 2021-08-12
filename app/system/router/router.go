@@ -70,6 +70,8 @@ func init() {
 				group.GET("/sysConfig/one", api.SysConfig.Get)
 				group.PUT("/sysConfig/edit", api.SysConfig.Edit)
 				group.DELETE("/sysConfig/delete", api.SysConfig.Delete)
+				group.POST("/sysConfig/syncData",api.SysConfig.SyncData)
+
 				//站点设置
 				group.GET("/sysWebSet", api.SysWebSet.Get)
 				group.POST("/sysWebSet/update", api.SysWebSet.Update)

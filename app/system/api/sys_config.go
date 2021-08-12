@@ -44,6 +44,7 @@ func (c *sysConfig) List(r *ghttp.Request) {
 	c.SusJsonExit(r, result)
 }
 
+//TODO:新添加的系统参数，需要添加到公司参数配置表中
 // Add 添加
 func (c *sysConfig) Add(r *ghttp.Request) {
 	var req *model.SysConfigAddReq
@@ -74,6 +75,7 @@ func (c *sysConfig) Get(r *ghttp.Request) {
 	c.SusJsonExit(r, params)
 }
 
+//TODO:修改系统参数，需要询问同步到哪些公司的中，可以选择同步全部公司，也可以选择同步部分
 // Edit 修改系统参数
 func (c *sysConfig) Edit(r *ghttp.Request) {
 	var req *model.SysConfigEditReq
@@ -94,6 +96,7 @@ func (c *sysConfig) Edit(r *ghttp.Request) {
 	c.SusJsonExit(r, "修改参数成功")
 }
 
+//TODO:删除参数，需要 删除对应的 公司参数配置表中的该参数
 // Delete 删除参数
 func (c *sysConfig) Delete(r *ghttp.Request) {
 	ids := r.GetInts("ids")
@@ -106,4 +109,12 @@ func (c *sysConfig) Delete(r *ghttp.Request) {
 	}
 	commonService.Cache.New().RemoveByTag(global.SysConfigTag)
 	c.SusJsonExit(r, "删除成功")
+}
+
+func (c *sysConfig) SyncData(r *ghttp.Request){
+	err := service.SysConfig.SyncDataToOrgConfig()
+	if err != nil {
+		c.FailJsonExit(r, err.Error())
+	}
+	c.SusJsonExit(r, "同步完成")
 }
