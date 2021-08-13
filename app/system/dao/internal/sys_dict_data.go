@@ -38,6 +38,7 @@ type sysDictDataColumns struct {
 	CreateBy  string // 创建者
 	UpdateBy  string // 更新者
 	Remark    string // 备注
+	Pic 	  string //图标
 	CreatedAt string // 创建时间
 	UpdatedAt string // 修改时间
 	DeletedAt string // 删除时间
@@ -62,6 +63,7 @@ var (
 			CreateBy:  "create_by",
 			UpdateBy:  "update_by",
 			Remark:    "remark",
+			Pic :      "pic", //图标
 			CreatedAt: "created_at",
 			UpdatedAt: "updated_at",
 			DeletedAt: "deleted_at",

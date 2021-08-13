@@ -123,6 +123,9 @@ func (s *sysConfig) DeleteByIds(ids []int) error {
 	return nil
 }
 
+//TODO：由于系统现在支持多公司都有一份自己的参数，所以登陆时候，需要通过登陆者归属的公司来获取它公司的对应的参数
+//处理思路： 1、用户登陆时候，获取用户的部门信息 ，然后找到这个部门的顶级部门，即找到他的【A集团】这样的节点的部门，因为参数是以这个部门去保存到sys_org_config表中的
+//相应的，sys_org_config表内容改以后，就删除缓存中的信息，让系统重新生成
 // GetConfigByKey 通过key获取参数（从缓存获取）
 func (s *sysConfig) GetConfigByKey(key string) (config *model.SysConfig, err error) {
 	if key == "" {
@@ -142,6 +145,8 @@ func (s *sysConfig) GetConfigByKey(key string) (config *model.SysConfig, err err
 	cache.Set(global.SysConfigTag+key, config, 0, global.SysConfigTag)
 	return
 }
+
+//TODO：由于系统现在支持多公司都有一份自己的参数，所以登陆时候，需要通过登陆者归属的公司来获取它公司的对应的参数
 
 // GetByKey 通过key获取参数（从数据库获取）
 func (s *sysConfig) GetByKey(key string) (config *model.SysConfig, err error) {

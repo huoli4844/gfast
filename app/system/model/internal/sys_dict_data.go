@@ -22,6 +22,7 @@ type SysDictData struct {
 	CreateBy  uint64      `orm:"create_by"         json:"createBy"`  // 创建者
 	UpdateBy  uint64      `orm:"update_by"         json:"updateBy"`  // 更新者
 	Remark    string      `orm:"remark"            json:"remark"`    // 备注
+	Pic       string      `orm:"pic"              json:"pic"`    // 备注
 	CreatedAt *gtime.Time `orm:"created_at"        json:"createdAt"` // 创建时间
 	UpdatedAt *gtime.Time `orm:"updated_at"        json:"updatedAt"` // 修改时间
 	DeletedAt *gtime.Time `orm:"deleted_at"        json:"deletedAt"` // 删除时间

@@ -59,6 +59,7 @@ type DictDataAddReq struct {
 	ListClass string `p:"listClass"`
 	IsDefault int    `p:"isDefault" v:"required|in:0,1#系统默认不能为空|默认值只能为0或1"`
 	Status    int    `p:"status"    v:"required|in:0,1#状态不能为空|状态只能为0或1"`
+	Pic       string `p:"pic"`
 	Remark    string `p:"remark"`
 	CreateBy  uint64
 }
